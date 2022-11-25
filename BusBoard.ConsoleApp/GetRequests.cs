@@ -7,84 +7,66 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
+using System.Reflection.Emit;
 using System.Text.Json;
 using System.CodeDom;
+using NPOI.SS.Formula.Functions;
 
 namespace BusBoard.ConsoleApp
 {
-    partial class Program
-    {
         class GetRequests
         {
-            // Function to send get request for postcode data for the requested postcode
-            public static PostcodeResponse PostcodeDataGetRequest(string postcode)
-            {
-                var client = new RestClient("https://api.postcodes.io/");
 
-                var request = new RestRequest("postcodes/" + postcode);
-
-                var response = client.Execute<PostcodeResponse>(request);
-
-                return response.Data;
-
-            }
-
-            // Function to send get request for bus stop data (using latitude and longitude from postcode data)
-            public static StopPointResponse BusStopDataGetRequest(double latitude, double longitude)
-            {
-                var client = new RestClient("https://api.tfl.gov.uk/");
-
-                var request = new RestRequest("StopPoint/?lat=" + latitude + "&lon=" + longitude + "&stopTypes=NaptanPublicBusCoachTram&radius=500&modes=bus");
-
-                var response = client.Execute<StopPointResponse>(request);
-
-                //var response = client.Execute(request);
-
-                //var deserialise = JsonConvert.DeserializeObject<PostcodeResponse>(response.Content);
-
-                //var resultList = JsonConvert.DeserializeObject<List<SomeObject>>(jsonstring);
-
-                //Console.WriteLine(deserialise.Data);
-                //Console.ReadLine();
-                
-                //return deserialise.Result;
-                return response.Data;
-            }
+        // Ask about get request errors (try / catch? But method then complains does not return the correct value)
 
 
 
-            // Function to send get request for bus arrival data for the requested stop code
-            public static List<BusArrivalData> BusArrivalDataGetRequest(string stopCode)
-            {
-                var client = new RestClient("https://api.tfl.gov.uk/");
+        // Method to execute get requests (private to this class)
+        private static T GetRequest<T>(string domainUrl, string resourceUrl)
+        {
+            var client = new RestClient(domainUrl);
+            var request = new RestRequest(resourceUrl);
+            
+            var response = client.Execute<T>(request);
+            return response.Data;
+        }
 
-                var request = new RestRequest("StopPoint/" + stopCode + "/Arrivals");
+        // Method to send get request to validate the requested postcode
+        public static PostcodeValidation PostcodeValidationGetRequest(string postcode)
+        {
+            string postcodeDomainUrl = "https://api.postcodes.io/";
+            string postcodeResourceUrl = $"postcodes/{postcode}/validate";
 
-                var response = client.Execute<List<BusArrivalData>>(request);
-
-                return response.Data;
-            }
-
-
-
-            // Previous attempt at using async/await
-
-            /*public static async Task<PostcodeResponse.PostcodeObject> PostcodeDataGetRequest(string postcode)
-            {
-                var client = new RestClient("https://api.postcodes.io/");
-                client.UseNewtonsoftJson();
-
-                var request = new RestRequest("postcodes/" + postcode, Method.Get, (Method)DataFormat.Json);
-
-                var response = await client.ExecuteGetAsync(request);
-
-                var deserialise = JsonConvert.DeserializeObject<PostcodeResponse>(response.Content);
-
-                return deserialise.Result;
-
-            }
-            */
+            return GetRequest<PostcodeValidation>(postcodeDomainUrl, postcodeResourceUrl);
 
         }
-    }
+        
+        // Method to send get request for postcode data for the requested postcode
+        public static PostcodeResponse PostcodeDataGetRequest(string postcode)
+        {
+            string postcodeDomainUrl = "https://api.postcodes.io/";
+            string postcodeResourceUrl = $"postcodes/{postcode}";
+
+            return GetRequest<PostcodeResponse>(postcodeDomainUrl, postcodeResourceUrl);
+
+        }
+
+        // Method to send get request for bus stop data (using latitude and longitude from postcode data)
+        public static BusStopResponse BusStopDataGetRequest(double latitude, double longitude)
+        {
+            string busStopDomainUrl = "https://api.tfl.gov.uk/";
+            string busStopResourceUrl = $"StopPoint/?lat={latitude}&lon={longitude}&stopTypes=NaptanPublicBusCoachTram&radius=500&modes=bus";
+
+            return GetRequest<BusStopResponse>(busStopDomainUrl, busStopResourceUrl); 
+        }
+
+        // Method to send get request for bus arrival data for the requested stop code
+        public static List<BusArrivalData> BusArrivalDataGetRequest(string stopCode)
+        {
+            string busArrivalDomainUrl = "https://api.tfl.gov.uk/";
+            string busArrivalResourceUrl = $"StopPoint/{stopCode}/Arrivals";
+
+            return GetRequest<List<BusArrivalData>>(busArrivalDomainUrl, busArrivalResourceUrl);
+        }
+        }   
 }

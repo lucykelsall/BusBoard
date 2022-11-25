@@ -3,8 +3,6 @@ using System;
 
 namespace BusBoard.ConsoleApp
 {
-    partial class Program
-    {
         public class BusArrivalData
             {
             public string Type { get; set; }
@@ -29,5 +27,5 @@ namespace BusBoard.ConsoleApp
             public string ModeName { get; set; }
 
         }
-    }
+
 }
