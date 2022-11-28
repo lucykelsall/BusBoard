@@ -2,7 +2,7 @@
 using RestSharp;
 using System.Collections.Generic;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
     public class PostcodeValidation
     {

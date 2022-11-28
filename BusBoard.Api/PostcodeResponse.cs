@@ -2,7 +2,7 @@
 using RestSharp;
 using System.Collections.Generic;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
     // Because the Json response is nested inside a 'result' object, the PostcodeObject class is nested inside PostcodeResponse
     // [JsonProperty] directs it to look there? The class could also have some properties which are not taken from the Json

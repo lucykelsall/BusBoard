@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
     public class BusStopResponse
     {

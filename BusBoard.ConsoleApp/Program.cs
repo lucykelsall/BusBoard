@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Security.Cryptography.X509Certificates;
+using BusBoard.Api;
 
 namespace BusBoard.ConsoleApp
 {

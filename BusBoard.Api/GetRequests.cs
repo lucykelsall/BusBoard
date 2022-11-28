@@ -1,5 +1,4 @@
 ﻿using RestSharp;
-using RestSharp.Serializers.NewtonsoftJson;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +9,10 @@ using Newtonsoft.Json;
 using System.Reflection.Emit;
 using System.Text.Json;
 using System.CodeDom;
-using NPOI.SS.Formula.Functions;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
-        class GetRequests
+        public class GetRequests
         {
 
         // Ask about get request errors (try / catch? But method then complains does not return the correct value)

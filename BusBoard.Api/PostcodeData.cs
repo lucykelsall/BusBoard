@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
     public class PostcodeData
     {
